@@ -29,7 +29,6 @@ function App() {
           <Route path="/pages/proveedor" element={<Proveedor />} />
           <Route path="/pages/salidaInventario" element={<SalidaInventario />} />
           <Route path="/pages/sucursal" element={<Sucursal />} />
-          <Route path="/pages/sucursal" element={<Sucursal />} />
           <Route path="/pages/transaccion" element={<Transaccion />} />
           <Route path="/pages/usuario" element={<Usuario />} />
         </Routes>
