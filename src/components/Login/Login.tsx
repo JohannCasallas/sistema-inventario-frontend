@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UsuarioService from '../../Services/UsuarioService';
 import { IUsuarioAutenticacion, initialUsuarioAutenticacion } from '../interfaces/IUsuarioAutenticacion';
-import { Alert, AlertTitle, Box, Button, CircularProgress, Grid, TextField, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Grid, TextField, Typography } from '@mui/material';
 import Swal from 'sweetalert2';
 
 

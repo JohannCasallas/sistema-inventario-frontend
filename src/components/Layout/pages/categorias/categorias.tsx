@@ -1,19 +1,30 @@
-import React from 'react';
-import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, Button, TextField } from '@mui/material';
-import { AppBarComponent } from '../layout/AppBar';
-import Layout from '../layout/Layaut';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import React, { useState } from 'react';
 
-const categoriasData = [
-    { id: 1, nombre: 'Categoría 1', descripcion: 'Descripción de la categoría 1' },
-    { id: 2, nombre: 'Categoría 2', descripcion: 'Descripción de la categoría 2' },
-    { id: 3, nombre: 'Categoría 3', descripcion: 'Descripción de la categoría 3' },
-    { id: 4, nombre: 'Categoría 4', descripcion: 'Descripción de la categoría 4' },
-    { id: 5, nombre: 'Categoría 5', descripcion: 'Descripción de la categoría 5' },
-];
+import CategoriasService from '../../../../Services/CategoriasService';
+import { ICategoria, estadoInicialCategoria } from '../../../interfaces/ICategoria';
+import { IRespuesta } from '../../../interfaces/IRespuesta';
+import CategoriasVista from './categoriasVista';
+import CategoriasModal from './categoriasModal';
 
-const YourComponent: React.FC = () => {
+
+
+const Categorias: React.FC = () => {
+    const [loading, setLoading] = React.useState(false);
+    const [categorias, setCategorias] = React.useState<IRespuesta<ICategoria[]>>();
+    const [categoria, setCategoria] = React.useState<ICategoria>(estadoInicialCategoria);
+    const [abrir, setAbrir] = useState(false);
+
+    React.useEffect(() => {
+        async function fetchCategorias() {
+            setLoading(true)
+            const categoriasData = await CategoriasService.listarCategorias();
+            setLoading(false)
+            setCategorias(categoriasData);
+        }
+        fetchCategorias()
+    }, []);
+
+
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -26,75 +37,38 @@ const YourComponent: React.FC = () => {
         setPage(0);
     };
 
+    const alCambiarValor: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
+        const { name, value } = e.target;
+        setCategoria(prevCategoria => ({
+          ...prevCategoria,
+          [name]: value
+        }));
+      };
+      
+      
+
+    const manejarModal = () => {
+        setAbrir(!abrir);
+    }
+
     return (
-        <Grid container direction="column" style={{ height: '100%', width: '100%' }}>
-            <Grid item>
-                <AppBarComponent />
-            </Grid>
-            <Grid item container style={{ height: '90%', width: '100%' }}>
-                <Grid item xs={2} style={{ backgroundColor: '#f0f0f0', height: '100%' }}>
-                    <Layout />
-                </Grid>
-                <Grid item xs={10} style={{ padding: '20px', height: '100%' }}>
-                    <Grid container spacing={2} alignItems="center" justifyContent="flex-end" padding="10px">
-                        <Grid item>
-                            {/* Aquí va el componente de búsqueda */}
-                            <TextField
-                                label="Buscar"
-                                variant="outlined"
-                                size="small"
-                                placeholder="Buscar..."
-                            />
-                        </Grid>
-                        <Grid item>
-                            {/* Botón de agregar */}
-                            <Button variant="contained" color="primary">
-                                Agregar
-                            </Button>
-                        </Grid>
-                    </Grid>
-                    <TableContainer component={Paper} style={{ height: 'calc(100% - 48px)' }}>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>ID</TableCell>
-                                    <TableCell>Nombre</TableCell>
-                                    <TableCell>Descripción</TableCell>
-                                    <TableCell>Acciones</TableCell> {/* Nueva columna para las acciones */}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {categoriasData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((categoria) => (
-                                    <TableRow key={categoria.id}>
-                                        <TableCell>{categoria.id}</TableCell>
-                                        <TableCell>{categoria.nombre}</TableCell>
-                                        <TableCell>{categoria.descripcion}</TableCell>
-                                        <TableCell>
-                                            <Button style={{color: 'red'}}>
-                                                <DeleteIcon />
-                                            </Button>
-                                            <Button color="primary">
-                                                <EditIcon />
-                                            </Button>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
-                        component="div"
-                        count={categoriasData.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                </Grid>
-            </Grid>
-        </Grid>
+        <>
+            <CategoriasVista
+                categorias={categorias}
+                handleChangePage={handleChangePage}
+                handleChangeRowsPerPage={handleChangeRowsPerPage}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                manejarModal={manejarModal}
+            />
+            <CategoriasModal
+                alCambiarValor={alCambiarValor}
+                abrir={abrir}
+                manejarModal={manejarModal}
+                categoria={categoria}
+            />
+        </>
     );
 };
 
-export default YourComponent;
+export default Categorias;
