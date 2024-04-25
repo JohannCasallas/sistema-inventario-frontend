@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
-import Layout from './components/Layout/Layaut';
+import Layout from './components/Layout/pages/layout/Layaut';
 import Login from './components/Login/Login';
 import Sucursal from './components/Layout/pages/sucursal/sucursal';
 import Categorias from './components/Layout/pages/categorias/categorias';
