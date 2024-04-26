@@ -12,6 +12,7 @@ import Proveedor from './components/Layout/pages/proveedor/proveedor';
 import SalidaInventario from './components/Layout/pages/salidaInventario/salidaInventario';
 import Transaccion from './components/Layout/pages/transaccion/transaccion';
 import Usuario from './components/Layout/pages/usuario/usuario';
+import Dashboard from './components/Layout/pages/dashboard/dashboard';
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/*" element={<Login />} />
-          <Route path="/pages" element={<Layout />} />
+          <Route path="/pages" element={<Dashboard />} />
           <Route path="/pages/categorias" element={<Categorias />} />
           <Route path="/pages/clientes" element={<Clientes />} />
           <Route path="/pages/entradaInventario" element={<EntradaInventario />} />
