@@ -64,28 +64,41 @@ const Categorias: React.FC = () => {
         }
     };
 
+
     const eliminarCategoria = async (categoria: ICategoria) => {
-        setLoading(true);
-        console.log(categoria.categoriaId, 'categoria.categoriaId')
-        let response = await CategoriasService.eliminarCategoria(categoria.categoriaId);
-        setLoading(false);
-        if (response.exitoso) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Éxito',
-                text: response.mensaje!,
-                timer: 3000,
-                showConfirmButton: false,
-            });
-            consultarCategorias()
-        } else {
-            Swal.fire({
-                icon: 'info',
-                title: 'Información',
-                text: response.mensaje!,
-                timer: 3000,
-                showConfirmButton: false,
-            });
+        const confirmacion = await Swal.fire({
+            icon: 'warning',
+            title: '¿Estás seguro?',
+            text: 'Esta acción eliminará la categoria permanentemente.',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d'
+        });
+
+        if (confirmacion.isConfirmed) {
+            setLoading(true);
+            let response = await CategoriasService.eliminarCategoria(categoria.categoriaId);
+            setLoading(false);
+            if (response.exitoso) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: response.mensaje!,
+                    timer: 3000,
+                    showConfirmButton: false,
+                });
+                consultarCategorias();
+            } else {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Información',
+                    text: response.mensaje!,
+                    timer: 3000,
+                    showConfirmButton: false,
+                });
+            }
         }
     };
 
