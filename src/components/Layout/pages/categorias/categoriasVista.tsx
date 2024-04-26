@@ -11,13 +11,15 @@ import { IRespuesta } from '../../../interfaces/IRespuesta';
 interface CategoriasVistaProps {
   categorias: IRespuesta<ICategoria[]> | undefined;
   manejarModal: (accion: 'creacion' | 'edicion') => void;
-  manejarClicEdicion: (categoria: ICategoria) => void
+  manejarClicEdicion: (categoria: ICategoria) => void;
+  eliminarCategoria: (categoria: ICategoria) => Promise<void>;
 }
 
 const CategoriasVista: React.FC<CategoriasVistaProps> = ({
   categorias,
   manejarModal,
   manejarClicEdicion,
+  eliminarCategoria,
 }) => {
   const [pagina, setPagina] = React.useState(0);
   const [filasPorPagina, setFilasPorPagina] = React.useState(5);
@@ -76,7 +78,10 @@ const CategoriasVista: React.FC<CategoriasVistaProps> = ({
                     <TableCell>{categoria.nombre}</TableCell>
                     <TableCell>{categoria.descripcion}</TableCell>
                     <TableCell>
-                      <Button style={{ color: 'red' }}>
+                      <Button
+                        style={{ color: 'red' }}
+                        onClick={() => eliminarCategoria(categoria)}
+                      >
                         <DeleteIcon />
                       </Button>
                       <Button

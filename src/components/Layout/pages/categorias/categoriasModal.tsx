@@ -9,6 +9,8 @@ interface CategoriaModalProps {
     alCambiarValor: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     cerrarModal: () => void;
     estadoModal: boolean;
+    editarCrearCategoria: () => Promise<void>;
+    setAbrir: React.Dispatch<React.SetStateAction<boolean>>; 
 }
 
 const CategoriasModal: React.FC<CategoriaModalProps> = ({
@@ -16,7 +18,9 @@ const CategoriasModal: React.FC<CategoriaModalProps> = ({
     categoria,
     alCambiarValor,
     cerrarModal,
-    estadoModal
+    estadoModal,
+    editarCrearCategoria,
+    setAbrir
 }) => {
     return (
         <Dialog open={abrir} onClose={cerrarModal}>
@@ -55,7 +59,7 @@ const CategoriasModal: React.FC<CategoriaModalProps> = ({
                 </Button>
                 <Button
                     variant="contained"
-                    onClick={() => { }}
+                    onClick={editarCrearCategoria}
                     color="primary"
                     disabled={!categoria?.nombre || !categoria?.descripcion}
                 >
