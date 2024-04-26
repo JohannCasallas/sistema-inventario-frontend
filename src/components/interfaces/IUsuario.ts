@@ -10,3 +10,12 @@ export interface IUsuario {
     correoElectronico?: string;
     telefono?: string;
 }
+
+export const initialUsuario: IUsuario = {
+    usuarioId: 0,
+    nombreUsuario: "",
+    contrasena: "",
+    activo: false,
+    rol: "",
+    fechaRegistro: new Date(),
+};
