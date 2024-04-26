@@ -14,7 +14,8 @@ interface CategoriasVistaProps {
   rowsPerPage: number;
   handleChangePage: (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => void;
   handleChangeRowsPerPage: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  manejarModal: () => void;
+  manejarModal: (accion: 'creacion' | 'edicion') => void;
+  estadoModal: boolean;
 }
 
 const CategoriasVista: React.FC<CategoriasVistaProps> = ({
@@ -23,7 +24,8 @@ const CategoriasVista: React.FC<CategoriasVistaProps> = ({
   rowsPerPage,
   handleChangePage,
   handleChangeRowsPerPage,
-  manejarModal
+  manejarModal,
+  estadoModal
 }) => {
   return (
     <Grid container direction="column" style={{ height: '100%', width: '100%' }}>
@@ -45,10 +47,10 @@ const CategoriasVista: React.FC<CategoriasVistaProps> = ({
               />
             </Grid>
             <Grid item>
-              <Button 
-              variant="contained" 
-              color="primary"
-              onClick={manejarModal}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => manejarModal('creacion')}
               >
                 Agregar
               </Button>
@@ -74,7 +76,7 @@ const CategoriasVista: React.FC<CategoriasVistaProps> = ({
                       <Button style={{ color: 'red' }}>
                         <DeleteIcon />
                       </Button>
-                      <Button color="primary" onClick={manejarModal}>
+                      <Button color="primary" onClick={() => manejarModal('edicion')}>
                         <EditIcon />
                       </Button>
                     </TableCell>

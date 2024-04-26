@@ -12,6 +12,8 @@ const Categorias: React.FC = () => {
     const [loading, setLoading] = React.useState(false);
     const [categorias, setCategorias] = React.useState<IRespuesta<ICategoria[]>>();
     const [categoria, setCategoria] = React.useState<ICategoria>(estadoInicialCategoria);
+    const [estadoModal, setEstadoModal] = React.useState<boolean>(false);
+
     const [abrir, setAbrir] = useState(false);
 
     React.useEffect(() => {
@@ -40,16 +42,28 @@ const Categorias: React.FC = () => {
     const alCambiarValor: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
         const { name, value } = e.target;
         setCategoria(prevCategoria => ({
-          ...prevCategoria,
-          [name]: value
+            ...prevCategoria,
+            [name]: value
         }));
-      };
-      
-      
+    };
 
-    const manejarModal = () => {
-        setAbrir(!abrir);
-    }
+
+
+    const manejarModal = (accion: 'creacion' | 'edicion') => {
+        setAbrir(true);
+        if (accion === 'creacion') {
+            setEstadoModal(true);
+        } else {
+            setEstadoModal(false);
+        }
+    };
+
+
+    const cerrarModal = () => {
+        setAbrir(false);
+    };
+
+
 
     return (
         <>
@@ -60,12 +74,15 @@ const Categorias: React.FC = () => {
                 page={page}
                 rowsPerPage={rowsPerPage}
                 manejarModal={manejarModal}
+                estadoModal={estadoModal}
             />
             <CategoriasModal
                 alCambiarValor={alCambiarValor}
                 abrir={abrir}
                 manejarModal={manejarModal}
                 categoria={categoria}
+                cerrarModal={cerrarModal}
+                estadoModal={estadoModal}
             />
         </>
     );

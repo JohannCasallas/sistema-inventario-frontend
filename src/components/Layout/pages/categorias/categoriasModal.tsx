@@ -4,59 +4,69 @@ import { ICategoria } from '../../../interfaces/ICategoria';
 
 
 interface CategoriaModalProps {
-  abrir: boolean;
-  manejarModal: () => void;
-  categoria?: ICategoria;
-  alCambiarValor: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+    abrir: boolean;
+    manejarModal: (accion: 'creacion' | 'edicion') => void;
+    categoria?: ICategoria;
+    alCambiarValor: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+    cerrarModal: () => void;
+    estadoModal: boolean;
 }
 
-const CategoriasModal: React.FC<CategoriaModalProps> = ({ 
-    abrir, 
-    manejarModal, 
+const CategoriasModal: React.FC<CategoriaModalProps> = ({
+    abrir,
+    manejarModal,
     categoria,
     alCambiarValor,
+    cerrarModal,
+    estadoModal
 }) => {
-  return (
-    <Dialog open={abrir} onClose={manejarModal}>
-      <DialogTitle>{categoria ? 'Editar Categoría' : 'Crear Categoría'}</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          Por favor, ingrese los detalles de la categoría.
-        </DialogContentText>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="nombre"
-          name="nombre"
-          label="Nombre Categoría"
-          type="text"
-          fullWidth
-          inputProps={{ maxLength: 30 }}
-          value={categoria?.nombre}
-          onChange={alCambiarValor}
-        />
-        <TextField
-          margin="dense"
-          id="descripcion"
-          name="descripcion"
-          label="Descripción Categoría"
-          type="text"
-          fullWidth
-          inputProps={{ maxLength: 50 }}
-          value={categoria?.descripcion}
-          onChange={alCambiarValor}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={manejarModal} color="primary">
-          Cancelar
-        </Button>
-        <Button onClick={() => {}} color="primary">
-          {categoria ? 'Editar' : 'Crear'}
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
+    return (
+        <Dialog open={abrir} onClose={cerrarModal}>
+            <DialogTitle>{estadoModal === true ? 'Crear Categoría' : 'Editar Categoría'}</DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    {estadoModal === true ? 'Por favor, ingrese los detalles de la categoría.' : 'Por favor, edite los detalles de la categoría.'}
+
+                </DialogContentText>
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="nombre"
+                    name="nombre"
+                    label="Nombre Categoría"
+                    type="text"
+                    fullWidth
+                    inputProps={{ maxLength: 30 }}
+                    value={categoria?.nombre}
+                    onChange={alCambiarValor}
+                />
+                <TextField
+                    margin="dense"
+                    id="descripcion"
+                    name="descripcion"
+                    label="Descripción Categoría"
+                    type="text"
+                    fullWidth
+                    inputProps={{ maxLength: 50 }}
+                    value={categoria?.descripcion}
+                    onChange={alCambiarValor}
+                />
+            </DialogContent>
+            <DialogActions>
+                <Button variant="contained" onClick={cerrarModal} color="primary">
+                    Cancelar
+                </Button>
+                <Button 
+                variant="contained" 
+                onClick={() => { }} 
+                color="primary"
+                disabled={!categoria?.nombre || !categoria?.descripcion }
+                >
+                    {estadoModal === true ? 'Crear' : 'Editar'}
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
 };
 
 export default CategoriasModal;
