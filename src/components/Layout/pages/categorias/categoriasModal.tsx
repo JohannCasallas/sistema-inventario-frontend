@@ -5,7 +5,6 @@ import { ICategoria } from '../../../interfaces/ICategoria';
 
 interface CategoriaModalProps {
     abrir: boolean;
-    manejarModal: (accion: 'creacion' | 'edicion') => void;
     categoria?: ICategoria;
     alCambiarValor: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     cerrarModal: () => void;
@@ -14,7 +13,6 @@ interface CategoriaModalProps {
 
 const CategoriasModal: React.FC<CategoriaModalProps> = ({
     abrir,
-    manejarModal,
     categoria,
     alCambiarValor,
     cerrarModal,
@@ -24,9 +22,8 @@ const CategoriasModal: React.FC<CategoriaModalProps> = ({
         <Dialog open={abrir} onClose={cerrarModal}>
             <DialogTitle>{estadoModal === true ? 'Crear Categoría' : 'Editar Categoría'}</DialogTitle>
             <DialogContent>
-                <DialogContentText>
+                <DialogContentText style={{ paddingTop: 10, paddingBottom: 20 }}>
                     {estadoModal === true ? 'Por favor, ingrese los detalles de la categoría.' : 'Por favor, edite los detalles de la categoría.'}
-
                 </DialogContentText>
                 <TextField
                     autoFocus
@@ -56,11 +53,11 @@ const CategoriasModal: React.FC<CategoriaModalProps> = ({
                 <Button variant="contained" onClick={cerrarModal} color="primary">
                     Cancelar
                 </Button>
-                <Button 
-                variant="contained" 
-                onClick={() => { }} 
-                color="primary"
-                disabled={!categoria?.nombre || !categoria?.descripcion }
+                <Button
+                    variant="contained"
+                    onClick={() => { }}
+                    color="primary"
+                    disabled={!categoria?.nombre || !categoria?.descripcion}
                 >
                     {estadoModal === true ? 'Crear' : 'Editar'}
                 </Button>

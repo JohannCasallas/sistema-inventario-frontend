@@ -27,18 +27,6 @@ const Categorias: React.FC = () => {
     }, []);
 
 
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-    const handleChangePage = (event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-
     const alCambiarValor: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
         const { name, value } = e.target;
         setCategoria(prevCategoria => ({
@@ -46,8 +34,6 @@ const Categorias: React.FC = () => {
             [name]: value
         }));
     };
-
-
 
     const manejarModal = (accion: 'creacion' | 'edicion') => {
         setAbrir(true);
@@ -58,28 +44,26 @@ const Categorias: React.FC = () => {
         }
     };
 
-
     const cerrarModal = () => {
         setAbrir(false);
+        setCategoria(estadoInicialCategoria);
     };
 
-
+    const manejarClicEdicion = (categoria: ICategoria) => {
+        setCategoria(categoria);
+        manejarModal('edicion');
+      };
 
     return (
         <>
             <CategoriasVista
                 categorias={categorias}
-                handleChangePage={handleChangePage}
-                handleChangeRowsPerPage={handleChangeRowsPerPage}
-                page={page}
-                rowsPerPage={rowsPerPage}
                 manejarModal={manejarModal}
-                estadoModal={estadoModal}
+                manejarClicEdicion={manejarClicEdicion}
             />
             <CategoriasModal
                 alCambiarValor={alCambiarValor}
                 abrir={abrir}
-                manejarModal={manejarModal}
                 categoria={categoria}
                 cerrarModal={cerrarModal}
                 estadoModal={estadoModal}

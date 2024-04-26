@@ -10,23 +10,26 @@ import { IRespuesta } from '../../../interfaces/IRespuesta';
 
 interface CategoriasVistaProps {
   categorias: IRespuesta<ICategoria[]> | undefined;
-  page: number;
-  rowsPerPage: number;
-  handleChangePage: (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => void;
-  handleChangeRowsPerPage: (event: React.ChangeEvent<HTMLInputElement>) => void;
   manejarModal: (accion: 'creacion' | 'edicion') => void;
-  estadoModal: boolean;
+  manejarClicEdicion: (categoria: ICategoria) => void
 }
 
 const CategoriasVista: React.FC<CategoriasVistaProps> = ({
   categorias,
-  page,
-  rowsPerPage,
-  handleChangePage,
-  handleChangeRowsPerPage,
   manejarModal,
-  estadoModal
+  manejarClicEdicion,
 }) => {
+  const [pagina, setPagina] = React.useState(0);
+  const [filasPorPagina, setFilasPorPagina] = React.useState(5);
+
+  const manejarCambioPagina = (evento: unknown, nuevaPagina: number) => {
+    setPagina(nuevaPagina);
+  };
+
+  const manejarCambioFilasPorPagina = (evento: React.ChangeEvent<HTMLInputElement>) => {
+    setFilasPorPagina(parseInt(evento.target.value, 10));
+    setPagina(0);
+  };
   return (
     <Grid container direction="column" style={{ height: '100%', width: '100%' }}>
       <Grid item>
@@ -67,7 +70,7 @@ const CategoriasVista: React.FC<CategoriasVistaProps> = ({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {categorias && categorias.datos!.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((categoria) => (
+                {categorias && categorias.datos!.slice(pagina * filasPorPagina, pagina * filasPorPagina + filasPorPagina).map((categoria) => (
                   <TableRow key={categoria.categoriaId}>
                     <TableCell>{categoria.categoriaId}</TableCell>
                     <TableCell>{categoria.nombre}</TableCell>
@@ -76,7 +79,13 @@ const CategoriasVista: React.FC<CategoriasVistaProps> = ({
                       <Button style={{ color: 'red' }}>
                         <DeleteIcon />
                       </Button>
-                      <Button color="primary" onClick={() => manejarModal('edicion')}>
+                      <Button
+                        color="primary"
+                        onClick={() => {
+                          manejarModal('edicion');
+                          manejarClicEdicion(categoria);
+                        }}
+                      >
                         <EditIcon />
                       </Button>
                     </TableCell>
@@ -89,10 +98,10 @@ const CategoriasVista: React.FC<CategoriasVistaProps> = ({
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
             count={categorias ? categorias.datos!.length : 0}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
+            rowsPerPage={filasPorPagina}
+            page={pagina}
+            onPageChange={manejarCambioPagina}
+            onRowsPerPageChange={manejarCambioFilasPorPagina}
           />
         </Grid>
       </Grid>
